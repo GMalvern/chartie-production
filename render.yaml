@@ -1,0 +1,28 @@
+# Render Blueprint for Chartie
+# This file defines the infrastructure for deploying Chartie on Render.com
+
+services:
+  - type: web
+    name: chartie-app
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 900000
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: 100
+      - key: CACHE_TTL_SECONDS
+        value: 3600
+    healthCheckPath: /health
+    autoDeploy: true

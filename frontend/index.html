@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chartie - AI-powered chart generation application">
+    <title>Chartie - AI Chart Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Chartie</h1>
+            <p class="subtitle">AI-Powered Chart Generator</p>
+        </header>
+
+        <main>
+            <div class="card">
+                <h2>Generate Your Chart</h2>
+                
+                <form id="chartForm">
+                    <div class="form-group">
+                        <label for="chartType">Chart Type</label>
+                        <select id="chartType" name="chartType">
+                            <option value="auto">Auto-detect</option>
+                            <option value="bar">Bar Chart</option>
+                            <option value="line">Line Chart</option>
+                            <option value="pie">Pie Chart</option>
+                            <option value="scatter">Scatter Plot</option>
+                            <option value="area">Area Chart</option>
+                            <option value="donut">Donut Chart</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prompt">Describe your chart</label>
+                        <textarea 
+                            id="prompt" 
+                            name="prompt" 
+                            rows="5" 
+                            placeholder="Example: Create a chart showing monthly sales data for Q1 2024 with values: January $50k, February $65k, March $80k"
+                            maxlength="5000"
+                            required
+                        ></textarea>
+                        <small class="char-count">0 / 5000 characters</small>
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="generateBtn">
+                        <span class="btn-text">Generate Chart Description</span>
+                        <span class="btn-loader" style="display: none;">
+                            <span class="spinner"></span> Generating...
+                        </span>
+                    </button>
+                </form>
+            </div>
+
+            <div id="resultSection" class="card result-card" style="display: none;">
+                <div class="result-header">
+                    <h2>Chart Description</h2>
+                    <div class="result-meta">
+                        <span class="badge" id="chartTypeBadge"></span>
+                        <span class="badge badge-success" id="cachedBadge" style="display: none;">Cached</span>
+                    </div>
+                </div>
+                <div id="result" class="result-content"></div>
+                <div class="result-footer">
+                    <small id="timestamp"></small>
+                </div>
+            </div>
+
+            <div id="errorSection" class="card error-card" style="display: none;">
+                <h3>⚠️ Error</h3>
+                <p id="errorMessage"></p>
+            </div>
+        </main>
+
+        <footer>
+            <p>Powered by Google Gemini AI</p>
+            <p class="footer-links">
+                <a href="/health" target="_blank">API Health</a> | 
+                <a href="https://github.com/GMalvern/chartie-production" target="_blank">GitHub</a>
+            </p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
