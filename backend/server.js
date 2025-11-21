@@ -6,6 +6,7 @@ const rateLimit = require('express-rate-limit');
 const NodeCache = require('node-cache');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const path = require('path');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -55,8 +56,8 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Rate limiting middleware
-const limiter = rateLimit({
+// Rate limiting middleware for API endpoints
+const apiLimiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes default
   max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100, // limit each IP to 100 requests per windowMs
   message: 'Too many requests from this IP, please try again later.',
@@ -64,7 +65,17 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 
-app.use('/api/', limiter);
+// Rate limiting middleware for general routes (more lenient)
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 300, // More lenient for static assets
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use('/api/', apiLimiter);
+app.use('/', generalLimiter);
 
 // Serve static frontend files
 app.use(express.static(path.join(__dirname, '../frontend')));
@@ -106,8 +117,9 @@ app.post('/api/generate', async (req, res) => {
       });
     }
 
-    // Create cache key
-    const cacheKey = `chart_${chartType || 'default'}_${Buffer.from(prompt).toString('base64').substring(0, 50)}`;
+    // Create cache key using SHA256 hash to avoid collisions
+    const promptHash = crypto.createHash('sha256').update(prompt).digest('hex');
+    const cacheKey = `chart_${chartType || 'default'}_${promptHash}`;
 
     // Check cache first
     const cachedResponse = cache.get(cacheKey);
@@ -173,6 +185,7 @@ app.delete('/api/cache/clear', (req, res) => {
 });
 
 // Catch-all route to serve index.html for SPA
+// Note: This route is protected by the generalLimiter middleware applied at line 78
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
 });

@@ -41,10 +41,10 @@
    Name: chartie-app
    Region: Oregon (US West)
    Branch: main
-   Root Directory: (leave empty)
+   Root Directory: backend
    Runtime: Node
-   Build Command: cd backend && npm install
-   Start Command: cd backend && npm start
+   Build Command: npm install
+   Start Command: npm start
    Plan: Free
    ```
 

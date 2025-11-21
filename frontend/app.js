@@ -90,8 +90,8 @@ chartForm.addEventListener('submit', async (e) => {
 function displayResult(data) {
     resultDiv.textContent = data.description;
     
-    // Update chart type badge
-    const displayChartType = data.chartType === 'auto' ? 'Auto-detected' : data.chartType;
+    // Update chart type badge with null check
+    const displayChartType = (data.chartType === 'auto' || !data.chartType) ? 'Auto-detected' : data.chartType;
     chartTypeBadge.textContent = displayChartType.charAt(0).toUpperCase() + displayChartType.slice(1);
     
     // Show cached badge if applicable
