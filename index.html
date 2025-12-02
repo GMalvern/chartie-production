@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chartie • Anchor Chart Builder</title>
+
+  <!-- Teacher-friendly font -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="logo-dot"></div>
+        <div class="brand">
+          <span class="brand-name">Chartie</span>
+          <span class="brand-tagline">If it’s up, it’s stuck.</span>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div class="mode-label">
+          Anchor Chart Mode
+        </div>
+        <button class="btn primary-btn" id="copyTextBtn" type="button">
+          Copy Chart Text
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Layout -->
+    <main class="main-layout">
+      <!-- LEFT: Controls -->
+      <section class="panel panel-left">
+        <div class="panel-section">
+          <h2 class="panel-title">Chart Basics</h2>
+
+          <label class="field-label" for="chartTitle">Chart Title</label>
+          <input
+            id="chartTitle"
+            type="text"
+            class="field-input"
+            placeholder="Example: Causes of the Texas Revolution"
+          />
+
+          <label class="field-label" for="chartSubtitle">Subtitle (optional)</label>
+          <input
+            id="chartSubtitle"
+            type="text"
+            class="field-input"
+            placeholder="Example: Why tensions increased between Texas and Mexico"
+          />
+
+          <label class="field-label" for="templateSelect">Layout Template</label>
+          <select id="templateSelect" class="field-input">
+            <option value="three-columns">3-Column Chart (Default)</option>
+            <option value="t-chart">T-Chart (Compare / Contrast)</option>
+            <option value="steps">Steps / Process</option>
+          </select>
+          <p class="helper-text">
+            You can change the layout anytime. Content stays the same.
+          </p>
+        </div>
+
+        <div class="panel-section">
+          <h2 class="panel-title">Section 1</h2>
+          <label class="field-label" for="section1Title">Heading</label>
+          <input
+            id="section1Title"
+            type="text"
+            class="field-input"
+            placeholder="Example: What Happened?"
+          />
+
+          <label class="field-label" for="section1Body">Content</label>
+          <textarea
+            id="section1Body"
+            class="field-textarea"
+            placeholder="Short phrases, bullets, or examples for this part of the chart."
+          ></textarea>
+        </div>
+
+        <div class="panel-section">
+          <h2 class="panel-title">Section 2</h2>
+          <label class="field-label" for="section2Title">Heading</label>
+          <input
+            id="section2Title"
+            type="text"
+            class="field-input"
+            placeholder="Example: Why It Mattered"
+          />
+
+          <label class="field-label" for="section2Body">Content</label>
+          <textarea
+            id="section2Body"
+            class="field-textarea"
+            placeholder="Short phrases, bullets, or examples for this part of the chart."
+          ></textarea>
+        </div>
+
+        <div class="panel-section">
+          <h2 class="panel-title">Section 3</h2>
+          <label class="field-label" for="section3Title">Heading</label>
+          <input
+            id="section3Title"
+            type="text"
+            class="field-input"
+            placeholder="Example: Remember This!"
+          />
+
+          <label class="field-label" for="section3Body">Content</label>
+          <textarea
+            id="section3Body"
+            class="field-textarea"
+            placeholder="Big ideas, test tips, or visuals you would draw."
+          ></textarea>
+        </div>
+
+        <div class="panel-section">
+          <h2 class="panel-title">Teacher Notes (Optional)</h2>
+          <textarea
+            id="teacherNotes"
+            class="field-textarea small"
+            placeholder="Reminders to yourself: how you’ll use the chart, questions to ask, or quick checks for understanding."
+          ></textarea>
+        </div>
+      </section>
+
+      <!-- RIGHT: Anchor Chart Preview -->
+      <section class="panel panel-right">
+        <div class="panel-title-row">
+          <h2 class="panel-title">Anchor Chart Preview</h2>
+          <span class="panel-subtitle">What will be on the wall</span>
+        </div>
+
+        <div class="preview-wrapper">
+          <div class="chart-canvas layout-three-columns" id="chartCanvas">
+            <div class="chart-header">
+              <div class="chart-title" id="previewChartTitle">
+                Chart Title
+              </div>
+              <div class="chart-subtitle" id="previewChartSubtitle">
+                Subtitle or guiding question
+              </div>
+            </div>
+
+            <div class="chart-body">
+              <div class="chart-section" id="previewSection1">
+                <div class="chart-section-title" id="previewSection1Title">
+                  Section 1
+                </div>
+                <div class="chart-section-body" id="previewSection1Body">
+                  Add key ideas for Section 1.
+                </div>
+              </div>
+
+              <div class="chart-section" id="previewSection2">
+                <div class="chart-section-title" id="previewSection2Title">
+                  Section 2
+                </div>
+                <div class="chart-section-body" id="previewSection2Body">
+                  Add key ideas for Section 2.
+                </div>
+              </div>
+
+              <div class="chart-section" id="previewSection3">
+                <div class="chart-section-title" id="previewSection3Title">
+                  Section 3
+                </div>
+                <div class="chart-section-body" id="previewSection3Body">
+                  Add key ideas for Section 3.
+                </div>
+              </div>
+            </div>
+
+            <div class="chart-footer">
+              <span class="chart-footer-label">Teacher Notes</span>
+              <span class="chart-footer-notes" id="previewTeacherNotes">
+                Notes here are just for you. Students won’t see this part in the printed chart.
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="export-status" id="exportStatus" aria-live="polite"></div>
+
+        <p class="helper-text helper-text-bottom">
+          Tip: To print, you can use your browser’s print or take a screenshot of the chart area once your content is set.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
