@@ -23,6 +23,47 @@ body {
 }
 
 /* =============== */
+/* Theme Variants  */
+/* (toggled on body) */
+/* =============== */
+
+body.theme-purple {
+  --chart-border: rgba(129, 140, 248, 0.55);
+  --chart-accent: #4338ca;
+  --chart-bg: radial-gradient(circle at top left, #fef6ff, #f5f3ff, #f9fafb);
+  --chart-title: #111827;
+  --chart-text: #111827;
+  --chart-subtext: #4b5563;
+}
+
+body.theme-monochrome {
+  --chart-border: rgba(55, 65, 81, 0.6);
+  --chart-accent: #111827;
+  --chart-bg: #f9fafb;
+  --chart-title: #000000;
+  --chart-text: #111827;
+  --chart-subtext: #4b5563;
+}
+
+body.theme-high-contrast {
+  --chart-border: #000000;
+  --chart-accent: #000000;
+  --chart-bg: #ffffff;
+  --chart-title: #000000;
+  --chart-text: #000000;
+  --chart-subtext: #111827;
+}
+
+body.theme-elementary {
+  --chart-border: #fb923c; /* orange */
+  --chart-accent: #2563eb; /* blue */
+  --chart-bg: linear-gradient(135deg, #fef3c7, #fee2e2);
+  --chart-title: #1f2937;
+  --chart-text: #111827;
+  --chart-subtext: #4b5563;
+}
+
+/* =============== */
 /* App Shell       */
 /* =============== */
 
@@ -85,7 +126,7 @@ body {
 .topbar-right {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .mode-label {
@@ -95,6 +136,15 @@ body {
   background: rgba(124, 116, 232, 0.08);
   color: #4338ca;
   border: 1px solid rgba(129, 140, 248, 0.3);
+}
+
+.inline-label {
+  font-size: 0.8rem;
+  color: #433f5b;
+}
+
+.theme-select {
+  max-width: 180px;
 }
 
 /* =============== */
@@ -130,6 +180,16 @@ body {
 .primary-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 10px 24px rgba(110, 54, 232, 0.45);
+}
+
+.ghost-btn {
+  background: rgba(255, 255, 255, 0.9);
+  color: #433f5b;
+  border-color: rgba(94, 90, 120, 0.22);
+}
+
+.ghost-btn:hover {
+  background: #ffffff;
 }
 
 /* =============== */
@@ -271,7 +331,7 @@ body {
   width: 100%;
   max-width: 720px;
   aspect-ratio: 4 / 3;
-  background: radial-gradient(circle at top left, #fef6ff, #f5f3ff, #f9fafb);
+  background: var(--chart-bg);
   border-radius: 1.4rem;
   padding: 1rem 1.1rem;
   display: flex;
@@ -304,14 +364,14 @@ body {
 .chart-title {
   font-size: 1.6rem;
   font-weight: 800;
-  color: #111827;
+  color: var(--chart-title);
   letter-spacing: 0.03em;
   margin-bottom: 0.15rem;
 }
 
 .chart-subtitle {
   font-size: 0.9rem;
-  color: #4b5563;
+  color: var(--chart-subtext);
 }
 
 /* Chart Body */
@@ -330,7 +390,7 @@ body {
   flex: 1;
   border-radius: 0.9rem;
   background: rgba(255, 255, 255, 0.96);
-  border: 2px solid rgba(129, 140, 248, 0.55);
+  border: 2px solid var(--chart-border);
   padding: 0.55rem 0.55rem 0.6rem;
   display: flex;
   flex-direction: column;
@@ -342,13 +402,13 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #4338ca;
+  color: var(--chart-accent);
   margin-bottom: 0.25rem;
 }
 
 .chart-section-body {
   font-size: 0.86rem;
-  color: #111827;
+  color: var(--chart-text);
   line-height: 1.35;
   white-space: pre-wrap;
 }
@@ -382,41 +442,49 @@ body {
 /* Layout Modes    */
 /* =============== */
 
-/* Default: three columns (already set by flex) */
+/* Default: three columns, 4th becomes bottom strip if used */
 
 .layout-three-columns .chart-body {
   flex-direction: row;
+  flex-wrap: nowrap;
 }
 
-/* T-Chart: two main sections, third becomes footer badge */
+.layout-three-columns #previewSection4 {
+  flex-basis: 100%;
+}
+
+/* T-Chart: 2 columns, 3rd optional bottom, 4th hidden */
 
 .layout-t-chart .chart-body {
-  flex-direction: row;
+  flex-direction: column;
+}
+
+.layout-t-chart .chart-body .chart-section {
+  flex: 0 0 auto;
 }
 
 .layout-t-chart .chart-body .chart-section:nth-child(1),
 .layout-t-chart .chart-body .chart-section:nth-child(2) {
-  flex: 1;
+  display: flex;
+}
+
+.layout-t-chart .chart-body .chart-section:nth-child(1) {
+  margin-bottom: 0.4rem;
+}
+
+.layout-t-chart .chart-body .chart-section:nth-child(2) {
+  margin-bottom: 0.4rem;
 }
 
 .layout-t-chart .chart-body .chart-section:nth-child(3) {
+  display: flex;
+}
+
+.layout-t-chart .chart-body .chart-section:nth-child(4) {
   display: none;
 }
 
-.layout-t-chart .chart-footer {
-  justify-content: space-between;
-}
-
-.layout-t-chart .chart-footer::before {
-  content: attr(data-third-heading);
-  font-weight: 600;
-  margin-right: auto;
-  margin-left: 0.75rem;
-  font-size: 0.78rem;
-  color: #4338ca;
-}
-
-/* Steps Layout: vertical stack */
+/* Steps Layout: vertical numbered stack */
 
 .layout-steps .chart-body {
   flex-direction: column;
@@ -424,6 +492,91 @@ body {
 
 .layout-steps .chart-section {
   flex: 0 0 auto;
+  position: relative;
+  padding-left: 2.1rem;
+}
+
+.layout-steps .chart-section::before {
+  content: attr(data-step);
+  position: absolute;
+  left: 0.55rem;
+  top: 0.55rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: var(--chart-accent);
+  color: #ffffff;
+}
+
+/* Frayer: 2x2 grid */
+
+.layout-frayer .chart-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.layout-frayer #previewSection1,
+.layout-frayer #previewSection2,
+.layout-frayer #previewSection3,
+.layout-frayer #previewSection4 {
+  display: flex;
+}
+
+/* Example / Non-Example: 2 main columns + bottom bar if 3rd used, 4th hidden */
+
+.layout-example-nonexample .chart-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "s1 s2"
+    "s3 s3";
+  gap: 0.6rem;
+}
+
+.layout-example-nonexample #previewSection1 {
+  grid-area: s1;
+}
+
+.layout-example-nonexample #previewSection2 {
+  grid-area: s2;
+}
+
+.layout-example-nonexample #previewSection3 {
+  grid-area: s3;
+}
+
+.layout-example-nonexample #previewSection4 {
+  display: none;
+}
+
+/* Timeline: horizontal boxes */
+
+.layout-timeline .chart-body {
+  flex-direction: row;
+}
+
+.layout-timeline .chart-section {
+  flex: 1;
+  position: relative;
+}
+
+.layout-timeline .chart-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0.2rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--chart-accent);
 }
 
 /* =============== */
@@ -465,7 +618,8 @@ body {
 
   .topbar-right {
     width: 100%;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: flex-start;
   }
 
   .chart-title {
@@ -482,5 +636,9 @@ body {
 
   .chart-footer-notes {
     max-width: 55%;
+  }
+
+  .main-layout {
+    padding: 0.7rem;
   }
 }
