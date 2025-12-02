@@ -156,5 +156,3 @@ Chartie is a proprietary tool and may not be reproduced, redistributed, or sold 
 
 Created by Gayle, educator, author, and people advocate —
 “The Cure for the Common PD.”
-
-If you'd like, I can also:
