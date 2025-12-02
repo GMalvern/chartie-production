@@ -73,30 +73,45 @@ body{
   margin-bottom:.25rem;
 }
 
-.hl{
-  display:inline;
-  padding:0 .15em;
-  border-radius:.2em;
+/* Base highlight wrapper */
+.hl {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.05em;
 }
 
-/* 🔥 Clean underline band — this is the one you liked under “make” */
-.hl-clean{
-  background:
-    linear-gradient(transparent 62%, var(--accent) 0) no-repeat;
-  background-size: 100% .45em;
-  background-position: 0 100%;
-}
-.hl-none{
-  background:none;
+/* Clean underline — drawn BELOW the text using ::after */
+.hl-clean {
+  text-decoration: none;
 }
 
-/* Brush stroke underline (baseline aligned) */
-.hl-brush{
-  background-image: var(--brush-url, none);
-  background-repeat:no-repeat;
-  background-size:100% .82em;
-  background-position: 0 100%;
+.hl-clean::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.12em;       /* tweak this if needed */
+  height: 0.16em;
+  background: var(--accent, #f59e0b);
+  border-radius: 999px;
+  z-index: -1;
 }
+
+/* Brush underline — uses your SVG but shifted lower so it doesn't hit letters */
+.hl-brush {
+  text-decoration: none;
+  background-image: var(--brush-url);
+  background-repeat: no-repeat;
+  background-size: 100% 0.7em;
+  background-position: 0 90%;   /* pushes it lower */
+}
+
+/* None */
+.hl-none {
+  text-decoration: none;
+  background: none;
+}
+
 
 /* Cards */
 .card{
