@@ -82,3 +82,79 @@ Lightweight
 Secure
 
 Easy to deploy anywhere
+
+🗂️ File Structure
+chartie-production/
+│
+├── index.html      # Main UI layout
+├── styles.css      # Styling & layout (anchor chart theme)
+└── script.js       # Live preview, layout switching, copy-to-clipboard
+
+🌐 Deployment
+
+Chartie is deployed on Netlify.
+
+Deployment method:
+
+No build command required
+
+Publish directory: / (root of repo)
+
+Netlify watches the main branch
+
+Any commit triggers an automatic redeploy
+
+🧩 Future Enhancements
+
+Additional anchor chart templates:
+
+Vocabulary / Frayer Model
+
+Example / Non-Example
+
+Graphic organizers
+
+Timelines
+
+Color theme switching (monochrome, high-contrast, elementary bold, etc.)
+
+Save/load charts via browser storage
+
+Export anchor charts as images (PNG/JPG)
+
+Mobile-friendly editing
+
+Integration with Ms. Malvern’s Class tools
+
+👩🏽‍🏫 Created For Teachers, By a Teacher
+
+Chartie was designed to help educators:
+
+Save time
+
+Stay organized
+
+Produce high-quality visuals
+
+Support student learning
+
+Reduce prep stress
+
+It was built with teachers in mind — especially those who juggle multiple preps, heavy grading loads, and daily lesson adjustments.
+
+“If it’s up, it’s stuck” means:
+When anchor charts stay visible, the learning stays with students.
+
+© Copyright & License
+
+© 2025 Renaissance Educators.
+All rights reserved.
+
+Chartie is a proprietary tool and may not be reproduced, redistributed, or sold without permission from Renaissance Educators.
+
+🙌 Credits
+
+Created by Gayle, educator, author, and people advocate —
+“The Cure for the Common PD.”
+
+If you'd like, I can also:
