@@ -397,27 +397,27 @@ function stripLeadingNumber(text) {
 function renderMathEx(obj){
   contentEl.innerHTML='';
 
-  const top=document.createElement('div');
-  top.className='grid gap-3 md:grid-cols-2';
+  const top = document.createElement('div');
+  top.className = 'grid gap-3 md:grid-cols-2';
 
-  // Worked Example — Given
+  // --- Worked Example — Given ---
   top.appendChild(
     makeCard(
       'Worked Example — Given',
-      `<ul class='pretty-list pl-6'>${(obj.given||[])
+      `<ul class='pretty-list pl-6'>${(obj.given || [])
         .map(g =>
-          `<li><span class="mathface ${toggleHand.checked?'math-hand':''}">${formatMath(g)}</span></li>`
+          `<li><span class="mathface ${toggleHand.checked ? 'math-hand' : ''}">${formatMath(g)}</span></li>`
         ).join('')}
       </ul>`
     )
   );
 
-  // Formula
+  // --- Formula ---
   top.appendChild(
     makeCard(
       'Formula',
       `<div class="eqbox">
-         <span class="mathface ${toggleHand.checked?'math-hand':''}">
+         <span class="mathface ${toggleHand.checked ? 'math-hand' : ''}">
            ${formatMath(obj.formula || '')}
          </span>
        </div>`
@@ -426,18 +426,18 @@ function renderMathEx(obj){
 
   contentEl.appendChild(top);
 
-  // Steps (strip leading numbers so <ol> handles numbering)
+  // --- Steps (supports strings OR { text, work }) ---
   contentEl.appendChild(
     makeCard(
       'Steps',
-      `<ol class='list-decimal pl-6'>${(obj.steps||[])
-        .map(s => {
-          const clean = stripLeadingNumber(s);
-          return `<li><span class="mathface ${toggleHand.checked?'math-hand':''}">${formatMath(clean)}</span></li>`;
-        }).join('')}
-      </ol>`
-    )
-  );
+      `<ol class='steps-list list-decimal pl-6'>${(obj.steps || [])
+        .map(step => {
+          let text, work;
+
+          // Backward compatible: plain strings still work
+          if (typeof step === 'string') {
+            text = stripLeadingNumber(step);
+
 
   // Worked Example lines
   contentEl.appendChild(
