@@ -530,23 +530,49 @@ async function generate(){
     : layoutSel.value;
 
   let prompt, schema;
-  if(chosen==='mathex'){
-    prompt=`You are Chartie, an expert teacher anchor-chart generator.
+ if (chosen === 'mathex') {
+  prompt = `You are Chartie, an expert teacher anchor-chart generator.
+
 Create a clear, step-by-step math worked example for: "${topic}".
-Return ONLY JSON with keys: title, subtitle, given[], formula, steps[], example[], answer.`;
-    schema={
-      type:'object',
-      properties:{
-        title:{type:'string'},
-        subtitle:{type:'string'},
-        given:{type:'array',items:{type:'string'}},
-        formula:{type:'string'},
-        steps:{type:'array',items:{type:'string'}},
-        example:{type:'array',items:{type:'string'}},
-        answer:{type:'string'}
+
+Return ONLY JSON with keys:
+- title (string)
+- subtitle (string)
+- given (array of short lines that list the given information)
+- formula (string with the general formula)
+- steps (array of objects) where each step has:
+    - text: explanation sentence in words
+    - work: OPTIONAL math line that shows that step numerically
+- example (array of lines showing the FULL worked example from start to finish)
+- answer (string with the final answer).`;
+
+  schema = {
+    type: 'object',
+    properties: {
+      title: { type: 'string' },
+      subtitle: { type: 'string' },
+      given: { type: 'array', items: { type: 'string' } },
+      formula: { type: 'string' },
+      steps: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            text: { type: 'string' },
+            work: { type: 'string' }
+          },
+          required: ['text']
+        }
       },
-      required:['title','steps']
-    };
+      example: { type: 'array', items: { type: 'string' } },
+      answer: { type: 'string' }
+    },
+    required: ['title', 'steps']
+  };
+}
+else if (chosen === 'compare'){
+  // (leave your compare / cause / standard code as-is below this)
+
   } else if(chosen==='compare'){
     prompt=`You are Chartie. Two-column comparison for: "${topic}". Return JSON: title, subtitle, leftTitle, leftBullets[], rightTitle, rightBullets[], conclusion.`;
     schema={
