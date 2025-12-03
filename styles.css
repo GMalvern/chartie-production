@@ -1003,5 +1003,9 @@ h1 {
   border-top: 1.3px solid currentColor;
   margin: 0 -0.05em;
 }
+/* Hide the format badge pill on all charts and exports */
+#format-badge {
+  display: none !important;
+}
 
 
