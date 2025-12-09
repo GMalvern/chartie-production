@@ -494,5 +494,41 @@ h1{
   background-size:100% 100%;
   opacity:0.9;
 }
+/* =========================================================
+   Landing hero spacing patch
+   ========================================================= */
+
+/* Reduce huge gap between navbar and hero text */
+main{
+  padding-top:3.5rem !important;  /* adjust up/down if you want */
+}
+
+/* On large screens, keep it comfy but not huge */
+@media (min-width:1024px){
+  main{
+    padding-top:4rem !important;
+  }
+}
+/* Landing sample sticky note tweak */
+.landing-preview .sticky,
+.sample-chart .sticky,
+.sample-output .sticky{
+  width:180px;          /* was 220px */
+  top:26px;             /* a bit lower */
+  right:26px;
+  transform:rotate(0.8deg);
+}
+
+.landing-preview .sticky h4,
+.sample-chart .sticky h4,
+.sample-output .sticky h4{
+  font-size:0.9rem;
+}
+
+.landing-preview .sticky p,
+.sample-chart .sticky p,
+.sample-output .sticky p{
+  font-size:0.98rem;
+}
 
 
