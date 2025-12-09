@@ -455,5 +455,44 @@ h1{
 #format-badge{
   display:none !important;
 }
+/* =========================================================
+   Highlight Mode Overrides (Safe Production Patch)
+   ========================================================= */
+
+/* Default safety: no underlines unless explicitly enabled */
+.hl-mode-none .card .marker-h::after{
+  content:none !important;
+}
+
+/* Clean underline mode */
+.hl-mode-clean .card .marker-h::after{
+  content:"";
+  position:absolute;
+  left:0.05rem;
+  right:0.4rem;
+  bottom:0.05rem;
+  height:3px;
+  border-radius:999px;
+  background:linear-gradient(
+    90deg,
+    rgba(249,115,22,0.9),
+    rgba(249,201,84,0.9)
+  );
+  opacity:0.9;
+}
+
+/* Brush mode mirrors clean for cards (optional) */
+.hl-mode-brush .card .marker-h::after{
+  content:"";
+  position:absolute;
+  left:0.05rem;
+  right:0.4rem;
+  bottom:0.07rem;
+  height:0.6em;
+  background-image:var(--brush-url);
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+  opacity:0.9;
+}
 
 
