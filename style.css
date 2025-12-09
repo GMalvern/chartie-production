@@ -530,5 +530,29 @@ main{
 .sample-output .sticky p{
   font-size:0.98rem;
 }
+/* =========================================================
+   Progress bar pencil patch
+   ========================================================= */
+
+/* Let the pencil hang above the bar */
+.progress-wrap{
+  overflow:visible !important;
+}
+
+/* Slightly refine pencil size/position */
+.pencil{
+  position:absolute;
+  top:-18px;       /* a bit higher so you really see it */
+  left:0;
+  transform:translateX(-8px);
+  width:32px;
+  height:32px;
+}
+
+.pencil svg{
+  width:100%;
+  height:100%;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.25));
+}
 
 
