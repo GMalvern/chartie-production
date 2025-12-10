@@ -554,5 +554,31 @@ main{
   height:100%;
   filter:drop-shadow(0 1px 2px rgba(0,0,0,.25));
 }
+/* =========================================================
+   Teacher-style anchor card tweaks
+   ========================================================= */
+
+.card{
+  background:#fffdf5; /* warm paper, not grey UI */
+  border-radius:0.9rem;
+  border:2px solid rgba(15,23,42,.14);
+  box-shadow:
+    0 2px 0 rgba(15,23,42,.14),
+    0 4px 10px rgba(15,23,42,.12);
+  padding:0.65rem 0.9rem;
+}
+
+/* Headings a bit more “marker-y” and bigger */
+.card .marker-h{
+  font-size:1.05rem;
+  letter-spacing:0.02em;
+  margin-bottom:0.3rem;
+}
+
+/* Bullets: more breathing room */
+.card .pretty-list li{
+  margin:0.18rem 0 0.25rem 0;
+  line-height:1.4;
+}
 
 
