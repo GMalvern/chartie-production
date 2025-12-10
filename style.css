@@ -580,5 +580,12 @@ main{
   margin:0.18rem 0 0.25rem 0;
   line-height:1.4;
 }
+/* Give CRex layouts a tiny teacher-tilt */
+body.crex-mode .card:nth-child(odd){
+  transform:translateY(1px) rotate(-0.25deg);
+}
+body.crex-mode .card:nth-child(even){
+  transform:translateY(-1px) rotate(0.2deg);
+}
 
 
