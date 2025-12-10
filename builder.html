@@ -1,1 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Chartie Builder — Think. Ink. Chart. BOOM!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Poppins:wght@400;600&family=DM+Serif+Display:ital@0;1&display=swap"
+    rel="stylesheet">
+
+  <!-- Shared Chartie styles -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-900">
+
+  <!-- TOP NAV -->
+  <header class="bg-white/90 backdrop-blur border-b border-slate-200 sticky top-0 z-20">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="h-9 w-9 rounded-xl bg-teal-400 flex items-center justify-center font-bold text-slate-900 text-lg shadow-sm">
+          C
+        </div>
+        <div>
+          <div class="font-semibold tracking-tight text-slate-900">Chartie™ Builder</div>
+          <div class="text-xs text-slate-500">Think · Ink · Chart. BOOM!</div>
+        </div>
+      </div>
+
+      <nav class="hidden sm:flex items-center gap-6 text-sm">
+        <a href="index.html" class="text-slate-600 hover:text-teal-600">← Back to Marketing</a>
+        <span class="px-3 py-1 text-xs rounded-full bg-teal-50 text-teal-700 border border-teal-200">
+          Builder Mode
+        </span>
+      </nav>
+    </div>
+  </header>
+
+  <!-- BUILDER MAIN -->
+  <main class="max-w-7xl mx-auto px-6 py-10 space-y-6">
+    
+    <!-- Header -->
+    <header class="space-y-1">
+      <h1 class="text-xl sm:text-2xl font-semibold text-slate-900">Chart Builder</h1>
+      <p class="text-sm text-slate-600">
+        Pick a layout, choose a background, type a topic, and let Chartie do the rest.
+      </p>
+    </header>
+
+    <!-- PANEL + SHEET WRAPPER -->
+    <div class="paper p-5 space-y-6">
+
+      <!-- CONTROL PANEL -->
+      <section class="space-y-5">
+
+        <!-- Row A -->
+        <div class="grid gap-3 md:grid-cols-[1fr_auto] items-end">
+          <div class="minw-0">
+            <label class="block text-sm font-medium mb-1">Topic</label>
+            <input
+              id="topic"
+              class="w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              placeholder="Type a topic for AI… or pick a Simple layout and paste."
+            />
+            <div id="error" class="hidden mt-2 text-rose-700 text-sm font-semibold"></div>
+          </div>
+
+          <div class="row-wrap items-end">
+            <button
+              id="btn-generate"
+              class="rounded-xl bg-teal-600 text-white font-semibold px-4 py-2 hover:bg-teal-500 transition">
+              Create Chart
+            </button>
+
+            <div class="min-w-[240px]">
+              <div class="progress-wrap">
+                <div class="progress-fill" id="progress-fill"></div>
+                <div class="pencil" id="progress-pencil" aria-hidden="true">
+                  <svg viewBox="0 0 64 64">
+                    <polygon points="4,60 8,44 20,56" fill="#fbbf24"></polygon>
+                    <rect x="8" y="8" width="32" height="40" rx="4" ry="4"></rect>
+                    <rect x="8" y="8" width="32" height="10" fill="#f97316"></rect>
+                    <polygon points="40,28 56,32 40,36" fill="#facc15"></polygon>
+                    <polygon points="56,32 60,36 56,40" fill="#111827"></polygon>
+                  </svg>
+                </div>
+              </div>
+              <div id="loading-text" class="text-xs text-slate-600 mt-1">
+                Ready. Type a topic and hit Create.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row B -->
+        <div class="grid gap-3 lg:grid-cols-2">
+          <div class="grid gap-3 sm:grid-cols-2">
+
+            <!-- Layout -->
+            <div>
+              <label class="block text-sm font-medium mb-1">Layout</label>
+              <select id="layout" class="w-full rounded-lg border px-3 py-2">
+                <optgroup label="AI layouts">
+                  <option value="auto">Auto (detect)</option>
+                  <option value="standard">Standard</option>
+                  <option value="compare">Comparison (POV)</option>
+                  <option value="cause">Cause ↔ Effect</option>
+                  <option value="timelineH">Timeline — Horizontal</option>
+                  <option value="frayer">Frayer (IFD)</option>
+                  <option value="frayerClassic">Frayer — Classic</option>
+                  <option value="mathex">MathEx — Worked Example</option>
+                  <!-- CRex -->
+                  <option value="crex-short">CRex – Short Constructed Response</option>
+                  <option value="crex-extended">CRex – Extended Constructed Response</option>
+                </optgroup>
+
+                <optgroup label="Simple layouts (no AI)">
+                  <option value="simple-title-body">Simple — Title & Body</option>
+                  <option value="simple-2col">Simple — Two Columns</option>
+                  <option value="simple-3col">Simple — Three Columns</option>
+                  <option value="simple-2x2">Simple — 2×2 Grid</option>
+                  <option value="simple-title-sub-3">Simple — Title + Subtitle + 3 Bullets</option>
+                  <option value="simple-title-sub-list">Simple — Title + Subtitle + List</option>
+                  <option value="simple-quote">Simple — Quote Card</option>
+                  <option value="simple-def-callout">Simple — Definition Callout</option>
+                  <option value="simple-objective-steps">Simple — Objective + Steps</option>
+                  <option value="simple-image">Simple — Image & Caption</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <!-- Toggles -->
+            <div>
+              <label class="block text-sm font-medium mb-1">Toggles</label>
+              <div class="row-wrap text-sm">
+                <label class="flex items-center gap-2">
+                  <input id="toggle-big" type="checkbox" class="h-4 w-4" />
+                  <span>Big Text</span>
+                </label>
+                <label class="flex items-center gap-2">
+                  <input id="toggle-emoji" type="checkbox" class="h-4 w-4" />
+                  <span>Emoji bullets</span>
+                </label>
+                <label class="flex items-center gap-2">
+                  <input id="toggle-hand" type="checkbox" class="h-4 w-4" />
+                  <span>Handwritten math</span>
+                </label>
+                <label class="flex items-center gap-2">
+                  <input id="toggle-sticky" type="checkbox" class="h-4 w-4" />
+                  <span>Sticky note</span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Highlight, Fonts, BG -->
+          <div class="grid gap-3 sm:grid-cols-3">
+
+            <div>
+              <label class="block text-sm font-medium mb-1">Highlight style</label>
+              <select id="hlStyle" class="w-full rounded-lg border px-3 py-2">
+                <option value="clean">Clean underline</option>
+                <option value="brush">Brush stroke</option>
+                <option value="none">None</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1">Font preset</label>
+              <select id="fontPreset" class="w-full rounded-lg border px-3 py-2">
+                <option value="hand+rounded">Flair Pen</option>
+                <option value="serif+rounded">Academic Queen</option>
+                <option value="hand+sans">That Funny Teacher</option>
+                <option value="clean+academic">Clean Academic</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1">Background</label>
+              <select id="bgStyle" class="w-full rounded-lg border px-3 py-2">
+                <option value="lined-light">Lined (Light)</option>
+                <option value="lined-dark">Lined (Dark)</option>
+                <option value="graph">Graph paper</option>
+                <option value="poster">Poster (white)</option>
+                <option value="blank">Blank</option>
+              </select>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ACCENTS + PAPER -->
+        <div class="grid gap-3 lg:grid-cols-2">
+
+          <!-- Swatches -->
+          <div>
+            <div class="text-sm font-medium mb-1">Accent</div>
+            <div class="row-wrap items-center">
+              <button class="swatch" data-color="#0d9488" style="background:#5eead4" title="Teal"></button>
+              <button class="swatch" data-color="#06b6d4" style="background:#cffafe" title="Cyan"></button>
+              <button class="swatch" data-color="#10b981" style="background:#d1fae5" title="Emerald"></button>
+              <button class="swatch" data-color="#6366f1" style="background:#e0e7ff" title="Indigo"></button>
+              <button class="swatch" data-color="#f59e0b" style="background:#fde68a" title="Amber"></button>
+            </div>
+          </div>
+
+          <!-- Paper -->
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <div class="text-sm font-medium">Paper (PDF)</div>
+              <select id="paper" class="w-full rounded-lg border px-2 py-1 text-sm">
+                <option value="letter">Letter 8.5×11</option>
+                <option value="a4">A4</option>
+                <option value="tabloid">Tabloid 11×17</option>
+              </select>
+            </div>
+
+            <div>
+              <div class="text-sm font-medium">Orientation</div>
+              <select id="orientation" class="w-full rounded-lg border px-2 py-1 text-sm">
+                <option value="portrait">Portrait</option>
+                <option value="landscape" selected>Landscape</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- SHEET -->
+      <section id="sheet" class="anchor-sheet bg-lined-light paper p-0 mt-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 pr-5">
+          <div class="minw-0">
+            <h2 id="chart-title" class="marker-title text-[1.9rem] md:text-[2.2rem] mb-1 pl-16 truncate">
+              Your Chart
+            </h2>
+            <p id="chart-sub" class="text-slate-700 pl-16 mb-2"></p>
+          </div>
+          <span id="format-badge" class="badge mt-2 mr-3">Format: Standard</span>
+        </div>
+
+        <div id="chart-content" class="grid gap-3 pl-16 pr-6 pb-6"></div>
+
+        <div id="sticky" class="sticky hidden" aria-hidden="true">
+          <h4 id="sticky-h"></h4>
+          <p id="sticky-p"></p>
+        </div>
+
+        <span class="visually-hidden" id="sr-status" aria-live="polite"></span>
+      </section>
+
+      <!-- DOWNLOADS -->
+      <div class="row-wrap items-center mt-4">
+        <button
+          id="btn-download"
+          class="rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-900 font-semibold px-4 py-2">
+          Download PNG
+        </button>
+        <button
+          id="btn-pdf"
+          class="rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-900 font-semibold px-4 py-2">
+          Download PDF
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
 
