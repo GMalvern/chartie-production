@@ -1,88 +1,323 @@
+/* =========================================================
+   Chartie — Complete, Production-Ready style.css
+   Teal/Mint Theme + Anchor Chart Aesthetic
+   ========================================================= */
+
 :root{
-  --accent:#f59e0b;
+  --accent:#0d9488;             /* teal */
+  --accent-light:#2dd4bf;
+  --paper-warm:#fffdf5;
   --title-font:'Patrick Hand', cursive;
-  --body-font:'Poppins', sans-serif;
+  --body-font:'Poppins', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
 
+/* ---------------------------------------------------------
+   Base Page Layout
+   --------------------------------------------------------- */
 body{
-  margin:0;
   background:#f6f7fb;
   color:#0f172a;
   font-family:var(--body-font);
+  margin:0;
+  padding:0;
 }
 
-/* HERO */
-.hero{
-  padding:4rem 0 4.5rem;
+/* Reset weird extra spacing on marketing hero */
+main{
+  padding-top:3.2rem !important;
+}
+@media(min-width:1024px){
+  main{ padding-top:4rem !important; }
 }
 
-body.builder-mode .hero{
-  display:none;
-}
-
-/* PAPER */
-.paper{
-  background:#fff;
-  border-radius:1.25rem;
-  box-shadow:0 10px 20px rgba(0,0,0,.06);
-}
-
-/* ANCHOR SHEET */
+/* ---------------------------------------------------------
+   Anchor Sheet Frame
+   --------------------------------------------------------- */
 .anchor-sheet{
   position:relative;
-  background:#fffdf5;
   border-radius:1.25rem;
-  overflow:hidden;
-}
-
-.anchor-sheet::before{
-  content:"";
-  position:absolute;
-  left:46px;
-  top:0;
-  bottom:0;
-  width:4px;
-  background:#ff8ab5;
-}
-
-/* TYPOGRAPHY */
-.marker-title{
-  font-family:var(--title-font);
-}
-
-/* CARD */
-.card{
-  background:#fffdf5;
-  border:2px solid rgba(15,23,42,.15);
-  border-radius:.9rem;
-  padding:.65rem .9rem;
-  box-shadow:0 4px 10px rgba(0,0,0,.12);
-}
-
-/* PROGRESS BAR */
-.progress-wrap{
-  position:relative;
-  height:10px;
-  background:#e5e7eb;
-  border-radius:999px;
+  border:1px solid rgba(15,23,42,.12);
+  background:var(--paper-warm);
+  box-shadow:
+    inset 0 0 15px rgba(0,0,0,.05),
+    0 10px 28px rgba(0,0,0,.18);
+  padding:2rem;
   overflow:visible;
 }
 
+/* Pink margin line */
+.anchor-sheet::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-left:4px solid #ff8ab5;
+  transform:translateX(46px);
+  pointer-events:none;
+}
+
+/* ---------------------------------------------------------
+   Notebook Background Options
+   --------------------------------------------------------- */
+.bg-lined-light{
+  background-color:#fffdf5;
+  background-image:linear-gradient(to bottom, rgba(148,163,184,.30) 1px, transparent 1px);
+  background-size:32px 32px;
+}
+.bg-lined-dark{
+  background-color:#f3eee3;
+  background-image:linear-gradient(to bottom, rgba(148,163,184,.40) 1px, transparent 1px);
+  background-size:32px 32px;
+}
+.bg-graph{
+  background-color:#ffffff;
+  background-image:
+    linear-gradient(to bottom, rgba(148,163,184,.32) 1px, transparent 1px),
+    linear-gradient(to right,  rgba(148,163,184,.32) 1px, transparent 1px);
+  background-size:24px 24px;
+}
+.bg-poster{ background:#ffffff; }
+.bg-blank{ background:#ffffff; }
+
+/* ---------------------------------------------------------
+   Typography
+   --------------------------------------------------------- */
+.marker-title{
+  font-family:var(--title-font);
+  font-size:2rem;
+  line-height:1.1;
+  margin:0 0 .5rem 0;
+}
+.marker-h{
+  font-family:var(--title-font);
+  font-size:1.15rem;
+  line-height:1.15;
+  margin-bottom:.25rem;
+}
+
+/* Prevent clipping in PNG/PDF */
+h1{
+  padding-top:.35em !important;
+  padding-bottom:.4em !important;
+}
+
+/* ---------------------------------------------------------
+   Highlight System (Clean / Brush / None FIXED)
+   --------------------------------------------------------- */
+
+/* Base wrapper */
+.hl{
+  position:relative;
+  display:inline-block;
+  padding-bottom:0.05em;
+}
+
+/* ----------------------- CLEAN ------------------------- */
+.hl-clean{
+  text-decoration:none !important;
+  background:none !important;
+}
+.hl-clean::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-0.12em;
+  height:0.16em;
+  background:var(--accent);
+  border-radius:999px;
+  z-index:-1;
+}
+
+/* ----------------------- BRUSH ------------------------- */
+.hl-brush{
+  text-decoration:none;
+  background-image:var(--brush-url);
+  background-repeat:no-repeat;
+  background-size:100% 0.7em;
+  background-position:0 90%;
+}
+
+/* ----------------------- NONE (TRUE FIX) ------------------------- */
+.hl-none,
+.hl-none::after{
+  background:none !important;
+  text-decoration:none !important;
+  content:none !important;
+  box-shadow:none !important;
+}
+
+/* Override card-title underline so highlight:none really removes all */
+.hl-mode-none .card .marker-h::after{
+  content:none !important;
+  background:none !important;
+}
+
+/* ---------------------------------------------------------
+   Cards — Teacher Style
+   --------------------------------------------------------- */
+.card{
+  background:var(--paper-warm);
+  border-radius:.9rem;
+  border:2px solid rgba(15,23,42,.14);
+  padding:.75rem 1rem;
+  margin-bottom:1rem;
+  box-shadow:
+    0 2px 0 rgba(15,23,42,.14),
+    0 4px 10px rgba(15,23,42,.10);
+}
+
+/* Marker underline under card headers */
+.card .marker-h{
+  position:relative;
+  padding-bottom:0.15rem;
+}
+.card .marker-h::after{
+  content:"";
+  position:absolute;
+  left:0.05rem;
+  right:0.4rem;
+  bottom:0.05rem;
+  height:3px;
+  border-radius:999px;
+  background:linear-gradient(
+    90deg,
+    var(--accent),
+    var(--accent-light)
+  );
+  opacity:.85;
+}
+
+/* Bullets */
+.pretty-list li{
+  margin:.2rem 0 .3rem 0;
+  line-height:1.4;
+}
+
+/* ---------------------------------------------------------
+   Accent Swatches
+   --------------------------------------------------------- */
+.swatch{
+  width:28px;
+  height:28px;
+  border-radius:.5rem;
+  border:1px solid rgba(0,0,0,.1);
+  cursor:pointer;
+}
+
+/* ---------------------------------------------------------
+   Math Mode (handwriting)
+   --------------------------------------------------------- */
+.math-hand .mathface{
+  font-family:'Patrick Hand','Kalam',cursive;
+  letter-spacing:0.3px;
+}
+
+/* Fractions */
+.frac{
+  display:inline-flex;
+  flex-direction:column;
+  align-items:center;
+  line-height:1;
+}
+.frac .bar{
+  width:100%;
+  border-top:1.3px solid currentColor;
+}
+
+/* ---------------------------------------------------------
+   Sticky Note (Fixed & Cute)
+   --------------------------------------------------------- */
+.sticky{
+  position:absolute;
+  top:18px;
+  right:18px;
+  width:200px;
+  background:#fff9c4;
+  border:1px solid rgba(0,0,0,.12);
+  border-radius:.55rem;
+  padding:.7rem .75rem .85rem;
+  box-shadow:
+    0 12px 24px rgba(0,0,0,.14),
+    inset 0 0 0 1px rgba(255,255,255,.7);
+  transform:rotate(.9deg);
+  z-index:4;
+}
+.sticky::after{
+  content:"";
+  position:absolute;
+  top:-12px;
+  left:36px;
+  right:36px;
+  height:18px;
+  background:linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,.12));
+  border:1px solid rgba(0,0,0,.08);
+  transform:rotate(-1.5deg);
+  border-radius:.2rem;
+}
+.sticky h4{
+  font-family:'Patrick Hand';
+  font-size:.95rem;
+  margin:0 0 .3rem 0;
+}
+.sticky p{
+  font-family:'Satisfy', cursive;
+  font-size:1.05rem;
+  line-height:1.4;
+  margin:0;
+  white-space:pre-wrap;
+}
+
+/* ---------------------------------------------------------
+   CRex Tilt Motion
+   --------------------------------------------------------- */
+body.crex-mode .card:nth-child(odd){
+  transform:translateY(1px) rotate(-0.3deg);
+}
+body.crex-mode .card:nth-child(even){
+  transform:translateY(-1px) rotate(0.25deg);
+}
+
+/* ---------------------------------------------------------
+   Progress Bar + Pencil Fix
+   --------------------------------------------------------- */
+.progress-wrap{
+  width:100%;
+  height:10px;
+  background:#e5e7eb;
+  border-radius:999px;
+  overflow:visible !important;
+  position:relative;
+}
 .progress-fill{
   height:100%;
   width:0%;
-  background:linear-gradient(90deg,var(--accent),#f97316);
+  background:linear-gradient(90deg, var(--accent), var(--accent-light));
+  transition:width .3s ease;
   border-radius:999px;
 }
-
-.pencil{
+.progress-pencil{
   position:absolute;
-  top:-18px;
-  width:32px;
-  height:32px;
+  top:-22px;
+  left:0;
+  width:34px;
+  height:34px;
+  transform:translateX(-10px);
+  z-index:5;
 }
 
-/* HIGHLIGHT — NO UNDERLINE BY DEFAULT */
-.hl::after{
-  content:none !important;
+/* ---------------------------------------------------------
+   Buttons
+   --------------------------------------------------------- */
+button{
+  cursor:pointer;
+}
+
+/* ---------------------------------------------------------
+   Misc Utilities
+   --------------------------------------------------------- */
+.hidden{ display:none !important; }
+
+/* Emoji bullets toggle */
+.emoji-bullets .pretty-list li::marker{
+  content:"✨ ";
 }
