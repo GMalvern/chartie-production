@@ -1,301 +1,212 @@
-/* =========================================================
-   Chartie — Full app.js (clean, fixed, production-ready)
-   ========================================================= */
+document.addEventListener("DOMContentLoaded", () => {
+  // Inputs
+  const titleInput = document.getElementById("chartTitleInput");
+  const bigIdeaInput = document.getElementById("bigIdeaInput");
+  const bulletsInput = document.getElementById("bulletsInput");
+  const askInput = document.getElementById("askYourselfInput");
+  const fontSelect = document.getElementById("fontSelect");
+  const backgroundSelect = document.getElementById("backgroundSelect");
+  const exportBtn = document.getElementById("exportPngBtn");
 
-// -----------------------------
-// Helpers
-// -----------------------------
-const $ = (id) => document.getElementById(id);
-const progressFill = $('progress-fill');
-const progressPencil = $('progress-pencil');
-const loadingText = $('loading-text');
+  // Displays
+  const titleDisplay = document.getElementById("chartTitleDisplay");
+  const bigIdeaDisplay = document.getElementById("bigIdeaDisplay");
+  const bulletsDisplay = document.getElementById("bulletsDisplay");
+  const askDisplay = document.getElementById("askYourselfDisplay");
+  const chartCanvas = document.getElementById("chartCanvas");
+  const pencilFill = document.getElementById("pencilFill");
 
-const sheet = $('sheet');
-const chartTitle = $('chart-title');
-const chartSub = $('chart-sub');
-const chartContent = $('chart-content');
+  // Accent controls
+  const accentButtons = document.querySelectorAll(".accent-swatch");
 
-const stickyBox = $('sticky');
-const stickyH = $('sticky-h');
-const stickyP = $('sticky-p');
+  // Helper to refresh bullets
+  function updateBullets() {
+    const raw = bulletsInput.value || "";
+    const lines = raw.split("\n").map(l => l.trim()).filter(Boolean);
 
-let currentAccent = '#0d9488'; // default teal
-let highlightMode = 'clean';   // clean | brush | none
+    bulletsDisplay.innerHTML = "";
+    lines.forEach(line => {
+      // Try to bold the word before the first dash
+      const parts = line.split("–");
+      let label = "";
+      let rest = "";
 
-// -----------------------------
-// Accent Setter
-// -----------------------------
-function setAccent(color){
-  currentAccent = color;
-  document.documentElement.style.setProperty('--accent', color);
-}
+      if (parts.length > 1) {
+        label = parts[0].trim();
+        rest = parts.slice(1).join("–").trim();
+      } else {
+        const spaceParts = line.split("-");
+        if (spaceParts.length > 1) {
+          label = spaceParts[0].trim();
+          rest = spaceParts.slice(1).join("-").trim();
+        } else {
+          rest = line;
+        }
+      }
 
-// -----------------------------
-// Highlight System
-// -----------------------------
-function applyHighlightMode(){
-  document.body.classList.remove('hl-mode-clean','hl-mode-brush','hl-mode-none');
+      const li = document.createElement("li");
 
-  if(highlightMode === 'clean') document.body.classList.add('hl-mode-clean');
-  if(highlightMode === 'brush') document.body.classList.add('hl-mode-brush');
-  if(highlightMode === 'none')  document.body.classList.add('hl-mode-none');
-}
+      if (label) {
+        const span = document.createElement("span");
+        span.className = "bullet-label";
+        span.textContent = label;
+        li.appendChild(span);
+        if (rest) {
+          li.appendChild(document.createTextNode(" – " + rest));
+        }
+      } else {
+        li.textContent = line;
+      }
 
-// -----------------------------
-// Background Setter
-// -----------------------------
-function setBackground(style){
-  sheet.classList.remove('bg-lined-light','bg-lined-dark','bg-graph','bg-poster','bg-blank');
-  sheet.classList.add(`bg-${style}`);
-}
-
-// -----------------------------
-// Font Presets
-// -----------------------------
-function setFonts(preset){
-  let titleFont = 'Patrick Hand';
-  let bodyFont = 'Poppins';
-
-  if(preset === 'serif+rounded'){
-    titleFont = 'DM Serif Display';
-    bodyFont = 'Nunito Sans';
-  }
-  if(preset === 'hand+sans'){
-    titleFont = 'Patrick Hand';
-    bodyFont = 'Nunito Sans';
-  }
-  if(preset === 'clean+academic'){
-    titleFont = 'Nunito Sans';
-    bodyFont = 'Nunito Sans';
+      bulletsDisplay.appendChild(li);
+    });
   }
 
-  document.documentElement.style.setProperty('--title-font', titleFont);
-  document.documentElement.style.setProperty('--body-font', bodyFont);
-}
-
-// -----------------------------
-// Progress Animation
-// -----------------------------
-function startProgress(){
-  progressFill.style.width = '0%';
-  setTimeout(() => {
-    progressFill.style.width = '100%';
-  }, 80);
-
-  loadingText.textContent = 'Building…';
-}
-
-function resetProgress(){
-  progressFill.style.width = '0%';
-  loadingText.textContent = 'Ready. Type a topic and hit Create.';
-}
-
-// -----------------------------
-// Sticky Toggle
-// -----------------------------
-function toggleStickyNote(show){
-  if(show){
-    stickyBox.classList.remove('hidden');
-  } else {
-    stickyBox.classList.add('hidden');
-  }
-}
-
-// -----------------------------
-// Layout Builders
-// -----------------------------
-function buildStandard(content){
-  chartContent.innerHTML = `
-    <div class="card">
-      <h3 class="marker-h"><span class="hl hl-${highlightMode}">Main Idea</span></h3>
-      <p>${content}</p>
-    </div>
-  `;
-}
-
-function buildCompare(content){
-  const halves = content.split('|');
-  chartContent.innerHTML = `
-    <div class="card">
-      <h3 class="marker-h"><span class="hl hl-${highlightMode}">Comparison</span></h3>
-      <div class="grid grid-cols-2 gap-4">
-        <div>${halves[0] || 'Side A…'}</div>
-        <div>${halves[1] || 'Side B…'}</div>
-      </div>
-    </div>
-  `;
-}
-
-function buildCause(content){
-  const halves = content.split('→');
-  chartContent.innerHTML = `
-    <div class="card">
-      <h3 class="marker-h"><span class="hl hl-${highlightMode}">Cause & Effect</span></h3>
-      <div class="grid grid-cols-2 gap-4">
-        <div><strong>Cause:</strong> ${halves[0] || ''}</div>
-        <div><strong>Effect:</strong> ${halves[1] || ''}</div>
-      </div>
-    </div>
-  `;
-}
-
-// -----------------------------
-// CRex Layouts
-// -----------------------------
-function buildCRexShort(topic){
-  chartContent.innerHTML = `
-    <div class="card">
-      <h3 class="marker-h"><span class="hl hl-${highlightMode}">CRex: Short Constructed Response</span></h3>
-      <ol class="list-decimal pretty-list pl-5">
-        <li>Restate the question.</li>
-        <li>Answer in one clear sentence.</li>
-        <li>Give one piece of evidence.</li>
-        <li>Close strong.</li>
-      </ol>
-    </div>
-  `;
-  document.body.classList.add('crex-mode');
-}
-
-function buildCRexExtended(topic){
-  chartContent.innerHTML = `
-    <div class="card">
-      <h3 class="marker-h"><span class="hl hl-${highlightMode}">CRex: Extended Response</span></h3>
-      <ol class="list-decimal pretty-list pl-5">
-        <li>Restate and introduce key idea.</li>
-        <li>Explain with supporting evidence.</li>
-        <li>Connect to topic ("This matters because…").</li>
-        <li>Conclude with a strong final insight.</li>
-      </ol>
-    </div>
-  `;
-  document.body.classList.add('crex-mode');
-}
-
-// -----------------------------
-// Simple Layouts
-// -----------------------------
-function buildSimpleTitleBody(title, body){
-  chartTitle.textContent = title;
-  chartContent.innerHTML = `
-    <div class="card"><p>${body}</p></div>
-  `;
-}
-
-// -----------------------------
-// AI Emulation Placeholder
-// -----------------------------
-async function fakeAI(topic, layout){
-  // In production you’ll replace this with real API calls
-  return `Generated notes about ${topic}.`;
-}
-
-// -----------------------------
-// MAIN GENERATE
-// -----------------------------
-$('btn-generate').addEventListener('click', async () => {
-  const topic = $('topic').value.trim();
-  const layout = $('layout').value;
-
-  if(!topic){
-    $('error').classList.remove('hidden');
-    $('error').textContent = 'Please enter a topic.';
-    return;
+  // Sync text fields
+  function wireInput(input, target, fallback = "") {
+    if (!input || !target) return;
+    const handler = () => {
+      const val = input.value.trim();
+      target.textContent = val || fallback;
+      updateProgress();
+    };
+    input.addEventListener("input", handler);
+    handler();
   }
 
-  $('error').classList.add('hidden');
-  startProgress();
+  wireInput(
+    titleInput,
+    titleDisplay,
+    "Leaders of the Republic of Texas ⭐"
+  );
 
-  // Clear mode states
-  document.body.classList.remove('crex-mode');
+  wireInput(
+    bigIdeaInput,
+    bigIdeaDisplay,
+    "Different leaders shaped the Republic of Texas in different ways — courage, vision, and tough decisions all mattered."
+  );
 
-  let generated = await fakeAI(topic, layout);
+  if (askInput && askDisplay) {
+    const askSpan = askDisplay.querySelector("span") || askDisplay;
+    const handler = () => {
+      const val = askInput.value.trim();
+      if (askSpan && askSpan !== askDisplay) {
+        askSpan.textContent = val || "What leadership quality am I seeing here?";
+      } else {
+        askDisplay.textContent =
+          "Ask yourself: " + (val || "What leadership quality am I seeing here?");
+      }
+      updateProgress();
+    };
+    askInput.addEventListener("input", handler);
+    handler();
+  }
 
-  chartTitle.textContent = topic;
-  chartSub.textContent = '';
+  if (bulletsInput) {
+    bulletsInput.addEventListener("input", () => {
+      updateBullets();
+      updateProgress();
+    });
+    updateBullets();
+  }
 
-  // Layout handling
-  if(layout === 'standard') buildStandard(generated);
-  else if(layout === 'compare') buildCompare(generated);
-  else if(layout === 'cause') buildCause(generated);
-  else if(layout === 'crex-short') buildCRexShort(topic);
-  else if(layout === 'crex-extended') buildCRexExtended(topic);
-  else buildStandard(generated);
+  // Accent color handling
+  function setAccent(color) {
+    chartCanvas.style.setProperty("--chart-accent", color);
+    accentButtons.forEach(btn => {
+      btn.classList.toggle(
+        "selected",
+        btn.getAttribute("data-accent") === color
+      );
+    });
+  }
 
-  resetProgress();
-});
-
-// -----------------------------
-// Swatches
-// -----------------------------
-document.querySelectorAll('.swatch').forEach(btn => {
-  btn.addEventListener('click', () => {
-    setAccent(btn.dataset.color);
-  });
-});
-
-// -----------------------------
-// Toggles
-// -----------------------------
-$('toggle-sticky').addEventListener('change', (e)=>{
-  toggleStickyNote(e.target.checked);
-});
-$('toggle-big').addEventListener('change', (e)=>{
-  document.body.classList.toggle('bigtext', e.target.checked);
-});
-$('toggle-emoji').addEventListener('change', (e)=>{
-  document.body.classList.toggle('emoji-bullets', e.target.checked);
-});
-$('toggle-hand').addEventListener('change', (e)=>{
-  document.body.classList.toggle('math-hand', e.target.checked);
-});
-
-// -----------------------------
-// Font, BG, Highlight Listeners
-// -----------------------------
-$('fontPreset').addEventListener('change', e => setFonts(e.target.value));
-$('bgStyle').addEventListener('change', e => setBackground(e.target.value));
-$('hlStyle').addEventListener('change', (e)=>{
-  highlightMode = e.target.value;
-  applyHighlightMode();
-});
-
-// -----------------------------
-// Download PNG
-// -----------------------------
-$('btn-download').addEventListener('click', async () => {
-  const canvas = await html2canvas(sheet, { scale: 2 });
-  const link = document.createElement('a');
-  link.download = 'chart.png';
-  link.href = canvas.toDataURL();
-  link.click();
-});
-
-// -----------------------------
-// Download PDF
-// -----------------------------
-$('btn-pdf').addEventListener('click', async () => {
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({
-    orientation: $('orientation').value,
-    unit: 'pt',
-    format: $('paper').value
+  accentButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const color = btn.getAttribute("data-accent");
+      setAccent(color);
+    });
   });
 
-  const canvas = await html2canvas(sheet, { scale: 2 });
-  const img = canvas.toDataURL('image/png');
+  // Default accent
+  setAccent("#f59e0b");
 
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const pageHeight = pdf.internal.pageSize.getHeight();
+  // Font change
+  if (fontSelect) {
+    fontSelect.addEventListener("change", () => {
+      if (fontSelect.value === "hand") {
+        chartCanvas.classList.add("hand-font");
+      } else {
+        chartCanvas.classList.remove("hand-font");
+      }
+    });
+    // set default
+    chartCanvas.classList.add("hand-font");
+  }
 
-  pdf.addImage(img, 'PNG', 0, 0, pageWidth, pageHeight);
-  pdf.save('chart.pdf');
+  // Background change
+  if (backgroundSelect) {
+    backgroundSelect.addEventListener("change", () => {
+      chartCanvas.classList.remove("chart-bg-lined", "chart-bg-grid", "chart-bg-plain");
+      if (backgroundSelect.value === "lined") {
+        chartCanvas.classList.add("chart-bg-lined");
+      } else if (backgroundSelect.value === "grid") {
+        chartCanvas.classList.add("chart-bg-grid");
+      } else {
+        chartCanvas.classList.add("chart-bg-plain");
+      }
+    });
+  }
+
+  // Pencil progress (simple: how much content is filled?)
+  function updateProgress() {
+    let score = 0;
+    const total = 4;
+
+    if (titleInput && titleInput.value.trim().length > 0) score++;
+    if (bigIdeaInput && bigIdeaInput.value.trim().length > 0) score++;
+    if (bulletsInput && bulletsInput.value.trim().length > 0) score++;
+    if (askInput && askInput.value.trim().length > 0) score++;
+
+    const percent = Math.max(20, Math.min(100, (score / total) * 100));
+    if (pencilFill) {
+      pencilFill.style.width = `${percent}%`;
+    }
+  }
+
+  updateProgress();
+
+  // Export as PNG
+  if (exportBtn && chartCanvas) {
+    exportBtn.addEventListener("click", async () => {
+      // Temporarily bump scale for better quality
+      const originalTransform = chartCanvas.style.transform;
+      chartCanvas.style.transform = "scale(1)";
+
+      try {
+        const canvas = await html2canvas(chartCanvas, {
+          backgroundColor: "#020617",
+          scale: 2
+        });
+        const dataUrl = canvas.toDataURL("image/png");
+
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        const safeTitle =
+          (titleInput?.value || "chartie-anchor-chart")
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/(^-|-$)+/g, "");
+        link.download = `${safeTitle || "chartie-anchor-chart"}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (err) {
+        console.error("Error exporting chart:", err);
+        alert("Oops — something went wrong exporting the chart. Try again?");
+      } finally {
+        chartCanvas.style.transform = originalTransform || "";
+      }
+    });
+  }
 });
-
-// -----------------------------
-// On Load: default states
-// -----------------------------
-setAccent('#0d9488');
-setBackground('lined-light');
-setFonts('hand+rounded');
-applyHighlightMode();
